@@ -12,7 +12,7 @@
       {% include "icons/arrow-left.svg" %}
     </c-button-nav>
 
-    <c-h1 class="font-normal text-[24px] w-full text-center">Item Details</c-h1>
+    <c-h1 class="font-normal text-[24px] w-full text-center">Item details</c-h1>
   </div>
 
   <div class="flex flex-col shadow-sm rounded-xl overflow-hidden w-full">
@@ -37,11 +37,14 @@
         request_txn.status == 50 or request_txn.status == 60 %} Borrowed {{
         request_txn.updated_at|timesince|first_unit }} ago by {% endif %}
 
-        <span class="underline inline">
-          {% if request_txn.party2 == user %} you {% else %} {{
+        <a
+          href="{% if request_txn.party2 == user %}{% url 'profile' %}{% else %}{% url 'public-profile' request_txn.party2.id %}{% endif %}"
+          class="underline inline cursor-pointer"
+        >
+          {% if request_txn.party2 == user %}you{% else %}{{
           request_txn.party2.get_full_name|default:request_txn.party2.username
-          }} {% endif %}
-        </span>
+          }}{% endif %}
+        </a>
       </div>
     </div>
     {% else %}
