@@ -149,57 +149,90 @@
             {% endfor %}
 
             {% if view.object.pk %}
-                <fieldset class="fieldset w-full gap-0">
+                <fieldset class="fieldset w-full gap-0"
+                          x-data="{ pendingFiles: [], pendingPreviews: [], existingCount: {{ view.object.photos.count }}, get remainingSlots() { return 4 - this.existingCount - this.pendingFiles.length; }, handleFileSelect(event) { const files = Array.from(event.target.files).slice(0, Math.max(0, this.remainingSlots)); files.forEach(file => { this.pendingFiles.push(file); this.pendingPreviews.push(URL.createObjectURL(file)); }); event.target.value = ''; this.syncSubmitInput(); }, removePending(index) { URL.revokeObjectURL(this.pendingPreviews[index]); this.pendingFiles.splice(index, 1); this.pendingPreviews.splice(index, 1); this.syncSubmitInput(); }, syncSubmitInput() { const dt = new DataTransfer(); this.pendingFiles.forEach(f => dt.items.add(f)); document.getElementById('new-photos-submit-input').files = dt.files; } }">
                     <legend class="fieldset-legend text-xs text-base-content/60">
                         Photos
                     </legend>
 
                     <div class="border border-base-100 rounded-lg p-4 flex flex-col gap-4 items-center">
-                        {% if view.object.photos.all %}
-                            <div class="grid grid-cols-2 gap-6 w-full justify-items-center">
-                                {% for photo in view.object.photos.all %}
-                                    <div class="border border-base-100 rounded flex flex-col items-center pb-2 overflow-hidden w-full max-w-[96px]">
-                                        <div class="w-full aspect-square overflow-hidden rounded-t">
-                                            <img src="{{ photo.image.url }}"
-                                                 alt="{{ view.object.name }} Photo {{ forloop.counter }}"
-                                                 class="w-full h-full object-cover" />
-                                        </div>
-                                        <button type="button"
-                                                class="btn btn-xs gap-1 mt-2 text-[11px] font-semibold"
-                                                onclick="showModal('item-photo-delete-modal-{{ photo.pk }}')">
-                                            {% include "icons/trash.svg" %}
 
-                                            Delete
-                                        </button>
+                        {# Grid: existing saved photos + pending previews #}
+                        <div class="grid grid-cols-2 gap-6 w-full justify-items-center"
+                             x-show="{{ view.object.photos.count }} > 0 || pendingPreviews.length > 0">
+                            {% for photo in view.object.photos.all %}
+                                <div class="border border-base-100 rounded flex flex-col items-center pb-2 overflow-hidden w-full max-w-[96px]">
+                                    <div class="w-full aspect-square overflow-hidden rounded-t">
+                                        <img src="{{ photo.image.url }}"
+                                             alt="{{ view.object.name }} Photo {{ forloop.counter }}"
+                                             class="w-full h-full object-cover" />
                                     </div>
-                                {% endfor %}
-                            </div>
-                        {% endif %}
+                                    <button type="button"
+                                            class="btn btn-xs gap-1 mt-2 text-[11px] font-semibold"
+                                            onclick="showModal('item-photo-delete-modal-{{ photo.pk }}')">
+                                        {% include "icons/trash.svg" %}
 
-                        <fieldset class="fieldset w-full gap-0">
-                            <legend class="fieldset-legend text-xs font-semibold text-base-content/60">
-                                Add Photo
-                            </legend>
-                            {% if view.object.photos.count < 4 %}
+                                        Delete
+                                    </button>
+                                </div>
+                            {% endfor %}
+
+                            {# Pending previews — shown immediately, saved on form submit #}
+                            <template x-for="(preview, index) in pendingPreviews" :key="index">
+                                <div class="border border-dashed border-base-content/30 rounded flex flex-col items-center pb-2 overflow-hidden w-full max-w-[96px] relative">
+                                    <div class="w-full aspect-square overflow-hidden rounded-t">
+                                        <img :src="preview"
+                                             alt="Pending upload"
+                                             class="w-full h-full object-cover" />
+                                    </div>
+                                    <span class="absolute top-1 right-1 bg-base-content/70 text-base-100 text-[9px] font-semibold px-1 py-px rounded leading-none">New</span>
+                                    <button type="button"
+                                            class="btn btn-xs gap-1 mt-2 text-[11px] font-semibold"
+                                            @click="removePending(index)">
+                                        {% include "icons/trash.svg" %}
+
+                                        Remove
+                                    </button>
+                                </div>
+                            </template>
+                        </div>
+
+                        {# Add Photo input — hidden once the 4-photo limit is reached #}
+                        {% if view.object.photos.count < 4 %}
+                            <fieldset class="fieldset w-full gap-0" x-show="remainingSlots > 0">
+                                <legend class="fieldset-legend text-xs font-semibold text-base-content/60">
+                                    Add Photo
+                                </legend>
                                 <label class="border border-base-content/20 rounded flex items-center w-full cursor-pointer bg-primary-content hover:bg-base-200/40 transition-colors h-10 overflow-hidden">
                                     <span class="inline-flex items-center justify-center self-stretch bg-base-200 font-semibold text-sm px-4 shrink-0">Choose file</span>
-                                    <span class="text-base-content text-sm truncate px-4" id="photo-file-label">No file chosen</span>
+                                    <span class="text-base-content/50 text-sm truncate px-4">No file chosen</span>
+                                    {# Picker input — no name, so it is never submitted. Cleared after each selection. #}
                                     <input type="file"
-                                           name="new_photos"
                                            accept="{{ photo_accept }}"
                                            multiple
                                            class="hidden"
-                                           onchange=" const files = this.files; document.getElementById('photo-file-label').textContent = files.length === 0 ? 'No file chosen' : files.length === 1 ? files[0].name : files.length + ' files selected'; ">
+                                           @change="handleFileSelect($event)">
                                 </label>
+                                {# Submission input — name="new_photos", kept in sync by DataTransfer in syncSubmitInput(). #}
+                                <input type="file"
+                                       id="new-photos-submit-input"
+                                       name="new_photos"
+                                       multiple
+                                       class="hidden">
                                 <div class="label pt-1">
                                     <span class="label-text-alt text-base-content/60">Max size 5MB per photo. Up to 4 photos total.</span>
                                 </div>
-                            {% else %}
-                                <p class="text-sm text-base-content/60 italic">
-                                    Photo limit (4) reached. Delete a photo to add another.
-                                </p>
-                            {% endif %}
-                        </fieldset>
+                            </fieldset>
+                            <p class="text-sm text-base-content/60 italic w-full"
+                               x-show="remainingSlots <= 0"
+                               x-cloak>
+                                Photo limit (4) reached. Remove a pending photo or save first.
+                            </p>
+                        {% else %}
+                            <p class="text-sm text-base-content/60 italic w-full">
+                                Photo limit (4) reached. Delete a photo to add another.
+                            </p>
+                        {% endif %}
                     </div>
                 </fieldset>
             {% endif %}
