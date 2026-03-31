@@ -275,6 +275,7 @@ class ItemUpdateView(
     def form_valid(self, form: ItemForm) -> HttpResponse:
         response = super().form_valid(form)
         self._process_uploaded_photos()
+        _add_message_safe(self.request, messages.SUCCESS, "Changes saved.")
         return response
 
     def _process_uploaded_photos(self) -> None:

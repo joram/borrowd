@@ -89,7 +89,7 @@
                                     {% endif %}
 
                                 {% endfor %}
-                                ],  /* Toggle a category by id: add if not selected, remove if already selected. */ toggle(id) { const idx = this.selectedIds.indexOf(id); if (idx === -1) { this.selectedIds.push(id); } else { this.selectedIds.splice(idx, 1); } },  isSelected(id) { return this.selectedIds.includes(id); },  /* * Display text for the trigger button. * No selection: 'Select an item category' * One selected: full category name * Multiple: first name truncated (12 chars) + '... + N more' *   e.g.: 'Home & Kitch... + 3 more' */ get buttonText() { if (this.selectedIds.length === 0) return 'Select an item category'; const firstName = this.categories.find(c => c.id === this.selectedIds[0])?.name || ''; if (this.selectedIds.length === 1) return firstName; const truncated = firstName.length > 12 ? firstName.slice(0, 12) + '...' : firstName; return truncated + ' + ' + (this.selectedIds.length - 1) + ' more'; },  /* Snapshot of selectedIds taken when the modal opens. The confirm button stays disabled until the user makes a change relative to this snapshot. */ initialIds: [],  openCategoryModal() { this.initialIds = [...this.selectedIds]; showModal('item-category-modal'); },  hasChangedSelection() { const a = [...this.selectedIds].sort(); const b = [...this.initialIds].sort(); return JSON.stringify(a) !== JSON.stringify(b); },  clearFilters() { this.selectedIds = []; closeModal('item-category-modal'); },  applyFilters() { closeModal('item-category-modal'); } }">
+                                ],  /* Toggle a category by id: add if not selected, remove if already selected. */ toggle(id) { const idx = this.selectedIds.indexOf(id); if (idx === -1) { this.selectedIds.push(id); } else { this.selectedIds.splice(idx, 1); } },  isSelected(id) { return this.selectedIds.includes(id); },  /* * Display text for the trigger button. * No selection: 'Select an item category' * One selected: full category name * Multiple: first name truncated (12 chars) + '... + N more' *   e.g.: 'Home & Kitch... + 3 more' */ get buttonText() { if (this.selectedIds.length === 0) return 'Select an item category'; const names = this.selectedIds.slice(0, 2).map(id => this.categories.find(c => c.id === id)?.name || ''); if (this.selectedIds.length <= 2) return names.join(', '); return names.join(', ') + ' + ' + (this.selectedIds.length - 2) + ' more'; },  /* Snapshot of selectedIds taken when the modal opens. The confirm button stays disabled until the user makes a change relative to this snapshot. */ initialIds: [],  openCategoryModal() { this.initialIds = [...this.selectedIds]; showModal('item-category-modal'); },  hasChangedSelection() { const a = [...this.selectedIds].sort(); const b = [...this.initialIds].sort(); return JSON.stringify(a) !== JSON.stringify(b); },  clearFilters() { this.selectedIds = []; closeModal('item-category-modal'); },  applyFilters() { closeModal('item-category-modal'); } }">
                                 <!-- Trigger button: opens the category selection modal -->
                                 <button type="button"
                                         @click="openCategoryModal()"
@@ -104,8 +104,13 @@
                                             </span>
                                         </template>
                                         <template x-if="selectedIds.length > 1">
+                                            <span class="inline-flex items-center justify-center h-[18px] px-[9px] py-px rounded-full border border-base-300 bg-base-100 text-base-content text-[10px] font-medium whitespace-nowrap shrink-0"
+                                                  x-text="categories.find(c => c.id === selectedIds[1])?.name || ''">
+                                            </span>
+                                        </template>
+                                        <template x-if="selectedIds.length > 2">
                                             <span class="inline-flex items-center justify-center h-[18px] px-[5px] py-px rounded-full border border-base-300 bg-base-100 text-base-content text-[10px] font-medium whitespace-nowrap shrink-0"
-                                                  x-text="'+ ' + (selectedIds.length - 1)">
+                                                  x-text="'+ ' + (selectedIds.length - 2)">
                                             </span>
                                         </template>
                                     </span>
@@ -176,9 +181,9 @@
                                 Add Photo
                             </legend>
                             {% if view.object.photos.count < 4 %}
-                                <label class="input input-bordered flex items-center w-full cursor-pointer bg-primary-content hover:bg-primary-content/50 transition-colors">
-                                    <span class="btn btn-sm rounded-sm mr-3 shrink-0">Choose file</span>
-                                    <span class="text-base-content/50 text-sm truncate" id="photo-file-label">No file chosen</span>
+                                <label class="border border-base-content/20 rounded flex items-center w-full cursor-pointer bg-primary-content hover:bg-base-200/40 transition-colors h-10 overflow-hidden">
+                                    <span class="inline-flex items-center justify-center self-stretch bg-base-200 font-semibold text-sm px-4 shrink-0">Choose file</span>
+                                    <span class="text-base-content text-sm truncate px-4" id="photo-file-label">No file chosen</span>
                                     <input type="file"
                                            name="new_photos"
                                            accept="{{ photo_accept }}"
