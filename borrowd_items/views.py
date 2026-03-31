@@ -17,7 +17,7 @@ from borrowd_permissions.mixins import (
     LoginOr404PermissionMixin,
 )
 from borrowd_permissions.models import ItemOLP
-from borrowd_users.models import BorrowdUser, SearchTerm, SearchTarget
+from borrowd_users.models import BorrowdUser, SearchTarget, SearchTerm
 
 from .card_helpers import (
     build_item_card_context,
@@ -195,9 +195,17 @@ class ItemDetailView(
         user: BorrowdUser = self.request.user  # type: ignore[assignment]
 
         action_context = self.object.get_action_context_for(user=user)
-        context["action_context"] = action_context
-        context["is_owner"] = self.object.owner == user
 
+        """
+        build_item_card_context() returns the full template context for item
+        cards, including ownership (is_yours), banner styling, action data, etc.
+        The detail template relies on these keys, so any detail-specific
+        context must be added *after* this call or included in the helper.
+        Keep in mind, though that item cards (inventory, search results, etc.)
+        also rely on this helper through `build_item_cards_for_items` and
+        `build_item_cards_for_transactions`, so make sure to check those for
+        compatability when updating the context helper.
+        """
         context = build_item_card_context(
             self.object, user, "item-details", action_context
         )
@@ -215,17 +223,16 @@ class ItemListView(
     template_name_suffix = "_list"  # Reusing template from ListView
     filterset_class = ItemFilter
 
-    def get(
-        self, request: HttpRequest, *args: Any, **kwargs: Any
-    ) -> HttpResponse:
+    def get(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:
         term = request.GET.get("search")
         if term is not None:
+            user: BorrowdUser = request.user  # type: ignore[assignment]
             SearchTerm.record_search(
-                user=request.user,
+                user=user,
                 target=SearchTarget.ITEMS,
                 term=term,
             )
-        return super().get(request, *args, **kwargs)
+        return super().get(request, *args, **kwargs)  # type: ignore[no-any-return]
 
     def get_queryset(self):  # type: ignore[no-untyped-def]
         queryset = super().get_queryset()
