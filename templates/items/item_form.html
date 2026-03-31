@@ -197,7 +197,7 @@
                             </template>
                         </div>
 
-                        {# Add Photo input — hidden once the 4-photo limit is reached #}
+                        {# Add Photo input — hidden once the 5-photo limit is reached #}
                         {% if view.object.photos.count < 5 %}
                             <fieldset class="fieldset w-full gap-0 px-[10px]" x-show="remainingSlots > 0">
                                 <legend class="fieldset-legend text-xs font-semibold text-base-content/60">
@@ -220,7 +220,7 @@
                                        multiple
                                        class="hidden">
                                 <div class="label pt-1">
-                                    <span class="label-text-alt text-base-content/60">Max size 5MB per photo. Up to 4 photos total.</span>
+                                    <span class="label-text-alt text-base-content/60">Max size 5MB per photo. Up to 5 photos total.</span>
                                 </div>
                             </fieldset>
                             <p class="text-sm text-base-content/60 italic w-full"
