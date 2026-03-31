@@ -285,7 +285,7 @@ class ItemUpdateView(
             return
 
         item: Item = self.object
-        remaining_slots = 4 - item.photos.count()
+        remaining_slots = 5 - item.photos.count()
 
         ext_validator = FileExtensionValidator(
             allowed_extensions=ALLOWED_IMAGE_EXTENSIONS
@@ -312,7 +312,7 @@ class ItemUpdateView(
             _add_message_safe(
                 self.request,
                 messages.WARNING,
-                f"{over_limit} photo(s) were skipped — photo limit (4) reached.",
+                f"{over_limit} photo(s) were skipped — photo limit (5) reached.",
             )
 
     def get_success_url(self) -> str:
