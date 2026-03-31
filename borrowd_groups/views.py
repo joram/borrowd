@@ -330,9 +330,7 @@ class GroupListView(LoginRequiredMixin, FilterView):  # type: ignore[misc]
     model = Membership
     filterset_class = GroupFilter
 
-    def get(
-        self, request: HttpRequest, *args: Any, **kwargs: Any
-    ) -> HttpResponse:
+    def get(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:
         term = request.GET.get("search")
         if term is not None:
             SearchTerm.record_search(
