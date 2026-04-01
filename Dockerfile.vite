@@ -1,0 +1,15 @@
+FROM node:22-slim
+
+WORKDIR /app
+
+COPY package.json package-lock.json vite.config.mjs ./
+RUN npm ci
+
+# Keep container-installed dependencies available when /app is bind-mounted.
+VOLUME ["/app/node_modules"]
+
+ENV HOST=0.0.0.0
+
+EXPOSE 5173
+
+CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0"]

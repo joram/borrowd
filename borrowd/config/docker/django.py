@@ -15,11 +15,17 @@ DATABASES = {
 
 ALLOWED_HOSTS = ["*"]
 
-MIDDLEWARE = [
-    "django.middleware.security.SecurityMiddleware",
-    "whitenoise.middleware.WhiteNoiseMiddleware",
-] + MIDDLEWARE[1:]  # noqa: F405
+STATIC_ROOT = BASE_DIR / "staticfiles"  # noqa: F405
+DJANGO_VITE = {
+    "default": {
+        "dev_mode": DEBUG,
+        "manifest_path": BASE_DIR / "build" / "manifest.json",  # noqa: F405
+    }
+}
 
-STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
-
-DJANGO_VITE["default"]["dev_mode"] = False  # noqa: F405
+if env.bool("LOCAL_SENTRY_ENABLED", default=False):
+    sentry_sdk.init(
+        dsn=SENTRY_DSN,  # noqa: F405
+        send_default_pii=True,
+        environment="local",
+    )
