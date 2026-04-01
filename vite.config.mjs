@@ -45,6 +45,9 @@ export default defineConfig(({mode}) => {
       alias: {
         $fonts: resolve(fontspath),
       }
+    },
+    server: {
+      allowedHosts: ["veilstreamapp.com"],
     }
   }
 });
