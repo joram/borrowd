@@ -23,3 +23,5 @@ MIDDLEWARE = [
 ] + MIDDLEWARE[1:]  # noqa: F405
 
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
+DJANGO_VITE["default"]["dev_mode"] = False  # noqa: F405
