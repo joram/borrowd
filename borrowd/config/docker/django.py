@@ -14,6 +14,7 @@ DATABASES = {
 }
 
 ALLOWED_HOSTS = ["*"]
+CSRF_TRUSTED_ORIGINS = env.list("CSRF_TRUSTED_ORIGINS", default=["https://*.veilstreamapp.com"])
 
 STATIC_ROOT = os.path.join(env("PLATFORM_APP_DIR", default="/app"), "staticfiles")
 DJANGO_VITE = {
