@@ -56,6 +56,9 @@ export default defineConfig(({mode}) => {
           /^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/,
         ],
       },
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+      },
     }
   }
 });

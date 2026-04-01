@@ -5,6 +5,8 @@ WORKDIR /app
 COPY package.json package-lock.json vite.config.mjs ./
 RUN npm ci
 
+COPY . .
+
 # Keep container-installed dependencies available when /app is bind-mounted.
 VOLUME ["/app/node_modules"]
 
