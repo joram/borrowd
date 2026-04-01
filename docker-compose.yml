@@ -18,8 +18,7 @@ services:
     command: >
       sh -c "python manage.py migrate &&
              python manage.py loaddata items/item_categories &&
-             python manage.py collectstatic --noinput &&
-             gunicorn --bind 0.0.0.0:8000 --workers 2 borrowd.wsgi:application"
+             python manage.py runserver 0.0.0.0:8000"
     ports:
       - "8000:8000"
     volumes:
