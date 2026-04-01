@@ -4,9 +4,9 @@
 
 This project uses:
 
-* [`uv`](https://docs.astral.sh/uv/)
-* [`pre-commit`](https://pre-commit.com/)
-* [`vite`](https://vite.dev/)
+- `[uv](https://docs.astral.sh/uv/)`
+- `[pre-commit](https://pre-commit.com/)`
+- `[vite](https://vite.dev/)`
 
 **Windows users:**
 This project assumes a Unix-like environment. On Windows, use [WSL2 (Ubuntu)](https://learn.microsoft.com/windows/wsl/).
@@ -32,7 +32,7 @@ sudo apt install -y curl git build-essential
 ### 1. Install `uv`, `npm` and other tools
 
 Recommended: install `npm` via
-[`nvm`, Node Version Manager](https://github.com/nvm-sh/nvm?tab=readme-ov-file#installing-and-updating):
+`[nvm`, Node Version Manager](https://github.com/nvm-sh/nvm?tab=readme-ov-file#installing-and-updating):
 
 ```
 # Python stuff
@@ -54,7 +54,7 @@ nvm use stable  # after this, `which npm` should find a working npm version
 ### 2. Clone repo
 
 Assumes you've got
-[`ssh` setup with GitHub](https://docs.github.com/en/authentication/connecting-to-github-with-ssh),
+`[ssh` setup with GitHub](https://docs.github.com/en/authentication/connecting-to-github-with-ssh),
 which is advisable. Otherwise, use the http link from the repo
 instead.
 
@@ -88,7 +88,7 @@ npm install
 
 ### 4. Create local `.env` file
 
-This project uses [`django-environ`](https://pypi.org/project/django-environ/)
+This project uses `[django-environ](https://pypi.org/project/django-environ/)`
 to manage env-var based configurability for the app. It expects the
 `.env` file to sit in the root of the repository, above the `borrowd/`
 Django project directory and the various sibling Django app dirs
@@ -107,18 +107,18 @@ to your liking.
 
 #### Env vars
 
-* `BORROWD_BETA_ENABLED`
+- `BORROWD_BETA_ENABLED`
 
-_Required: No_
-_Default: False_
+*Required: No*
+*Default: False*
 
 Specifies whether or not to enable the "Beta Wall". This is functionality
 that requires users to have an enter a code before accessing the application,
 above and beyond the normal auth process.
 
-* `DJANGO_SECRET_KEY`
+- `DJANGO_SECRET_KEY`
 
-_Required: either this OR the subsequent var_
+*Required: either this OR the subsequent var*
 
 Long, high-entropy, secret string for Django to use for cryptography
 operations.
@@ -131,28 +131,28 @@ uv run python -c "from django.core.management.utils import get_random_secret_key
 DJANGO_SECRET_KEY=<generated-value-goes-here>
 ```
 
-* `DJANGO_SECRET_KEY_VAR_NAME`
+- `DJANGO_SECRET_KEY_VAR_NAME`
 
-_Required: either this OR the previous var_
+*Required: either this OR the previous var*
 
-An alternative to `DJANGO_SECRET_KEY`. The _name_ of _another_ env
+An alternative to `DJANGO_SECRET_KEY`. The *name* of *another* env
 var in which is specified a long, high-entropy, secret string for
 Django to use for cryptography operations.
 
-Either this var _or_ `DJANGO_SECRET_KEY` must be set. If this var is
+Either this var *or* `DJANGO_SECRET_KEY` must be set. If this var is
 set, then the value of `DJANGO_SECRET_KEY` will be ignored.
 
-* `DJANGO_SETTINGS_MODULE`
+- `DJANGO_SETTINGS_MODULE`
 
-_Required: Yes_
-_Default: None_
+*Required: Yes*
+*Default: None*
 
 Module path to the desired django config file to load.
 
-* `LOCAL_SENTRY_ENABLED`
+- `LOCAL_SENTRY_ENABLED`
 
-_Required: No_
-_Default: False_
+*Required: No*
+*Default: False*
 
 Specifies whether or not to enable the sentry integration when running locally.
 Must be paired with `DJANGO_SETTINGS_MODULE=borrowd.config.dev.django`. This
@@ -164,8 +164,9 @@ Now all your tooling is installed, you're ready to fire up the
 Borrow'd app locally.
 
 There are two parts to this:
+
 1. Run the `vite` dev server, for hot reloading local CSS / JS when
-   updated, and
+  updated, and
 2. Run the Django dev server, for serving the app
 
 You may find it most convenient to run these in two separate shell
@@ -181,7 +182,7 @@ npm run dev
 
 Then, the Python part (in a separate shell).
 
-Note that you don't _need_ to `activate` your Python `venv` to do
+Note that you don't *need* to `activate` your Python `venv` to do
 this; `uv` provides a useful shorthand to automatically make use
 of the local `venv`, using its `run` subcommand:
 
@@ -192,9 +193,9 @@ uv run manage.py runserver
 ```
 
 At this point, your local Borrow'd checkout should be running at
-http://127.0.0.1:8000/.
+[http://127.0.0.1:8000/](http://127.0.0.1:8000/).
 
-We are using [`django-vite`](https://pypi.org/project/django-vite/).
+We are using `[django-vite](https://pypi.org/project/django-vite/)`.
 This provides a template tag which, in dev mode, injects the
 necessary Javascript to connect to the `vite` server we started with
 `npm run dev`; that server is what watches our filesystem for changes
@@ -241,14 +242,15 @@ is in the `borrowd/` directory. Django
 are created to namespace code and assets for different aspects of the
 project: users, groups, etc. Note that while the top-level app dirs
 are prefixed with `borrowd_`, the model class names therein are not
-(e.g. `borrowd_items.models.`**`Item`**, not `BorrowdItem`).
+(e.g. `borrowd_items.models.**Item`**, not `BorrowdItem`).
 
 The `templates/` and `static/` dirs are kept at the top level of the
 repo.
-* The `templates/[components|includes|layouts]/` subdirs contain
-  resources used broadly across the project.
-* Resources for specific areas are kept in other, namespaced subdirs,
-  e.g. `templates/[users|web|etc...]/`.
+
+- The `templates/[components|includes|layouts]/` subdirs contain
+resources used broadly across the project.
+- Resources for specific areas are kept in other, namespaced subdirs,
+e.g. `templates/[users|web|etc...]/`.
 
 ## Front-end
 
@@ -259,13 +261,14 @@ templating system (similar to [Jinja2](https://jinja.palletsprojects.com/en/stab
 
 We use [django-cotton](https://django-cotton.com/) to enable creating
 reusable UI components.
-* Note that instead of the default `templates/cotton/` directory, we
-  use the [`COTTON_DIR` config](https://django-cotton.com/docs/configuration)
-  to store components in the more sensible `templates/components/` dir.
-* Remember that components _can_ live in additional subdirs of
-  `templates/components/`: components in subfolders can be referenced
-   using dot notation to represent folder levels. See the docs section
-   "Subfolders" [on this page](https://django-cotton.com/docs/usage-patterns).
+
+- Note that instead of the default `templates/cotton/` directory, we
+use the `[COTTON_DIR` config](https://django-cotton.com/docs/configuration)
+to store components in the more sensible `templates/components/` dir.
+- Remember that components *can* live in additional subdirs of
+`templates/components/`: components in subfolders can be referenced
+ using dot notation to represent folder levels. See the docs section
+ "Subfolders" [on this page](https://django-cotton.com/docs/usage-patterns).
 [django-template-partials](https://pypi.org/project/django-template-partials/)
 can also help with reuse.
 
@@ -291,8 +294,8 @@ just a related Profile model with a
 [one-to-one relationship](https://docs.djangoproject.com/en/5.2/topics/auth/customizing/#extending-the-existing-user-model)
 with the standard User model. This is defined in the `borrowd_users/` app.
 
-
 ## Deployment
+
 Configuration files are present to deploy the app on platform.sh.
 
 `.platform.app.yaml` holds app and services configurations as well as deployment hooks
@@ -303,17 +306,21 @@ Prod media and file storages are configured to use AWS S3 buckets (via wasabi).
 Platform.sh maintains a git repository whose branches are each deployed as separate environments with their own services. Environment variables can be configured to be shared across environments. `main` is considered the CI/CD build and tagged git branches will be merged to an official public `release` branch.
 
 To manually push and deploy the app (assuming platform.sh access):
+
 ```
 platform project:set-remote <project-id>
 git push -u platform <main|release|feature-branch>
 ```
 
 DB CLI
+
 ```
 platform sql -e main
 ```
 
 View container logs
+
 ```
 platform log -p <project-id> -e main
 ```
+

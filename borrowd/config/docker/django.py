@@ -2,6 +2,8 @@ from borrowd.config.dev.django import *  # noqa: F401, F403
 
 from borrowd.config.env import env
 
+DEBUG = False
+
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
@@ -14,3 +16,10 @@ DATABASES = {
 }
 
 ALLOWED_HOSTS = ["*"]
+
+MIDDLEWARE = [
+    "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
+] + MIDDLEWARE[1:]  # noqa: F405
+
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
