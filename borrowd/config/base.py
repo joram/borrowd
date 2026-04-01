@@ -195,7 +195,12 @@ if not _parsed_base_static_url.netloc:
 
 BASE_STATIC_PROTOCOL = _parsed_base_static_url.scheme or "http"
 BASE_STATIC_HOST = _parsed_base_static_url.hostname or "localhost"
-BASE_STATIC_PORT = _parsed_base_static_url.port or 5173
+if _parsed_base_static_url.port is not None:
+    BASE_STATIC_PORT = _parsed_base_static_url.port
+elif BASE_STATIC_HOST in {"localhost", "127.0.0.1"}:
+    BASE_STATIC_PORT = 5173
+else:
+    BASE_STATIC_PORT = None
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
