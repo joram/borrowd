@@ -78,8 +78,6 @@
         </p>
     {% endif %}
     {% if errors %}
-        <p class="label text-error text-xs">
-            {{ errors }}
-        </p>
+            <p class="mt-1 text-error text-xs">{{ errors|striptags }}</p>
     {% endif %}
 </fieldset>
