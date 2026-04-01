@@ -13,8 +13,12 @@
         {% block extra_head %}
         {% endblock extra_head %}
         <link rel="icon" type="image/png" href="{% static 'favicon.png' %}" />
-        {% vite_hmr_client %}
+        {% if vite_dev_mode %}
+        <script type="module" src="{{ vite_client_url }}"></script>
+        <script type="module" src="{{ vite_main_asset_url }}"></script>
+        {% else %}
         {% vite_asset 'static/js/main.js' %}
+        {% endif %}
         <style>
             p a {
                 color: #2563eb; /* Tailwind blue-600 */

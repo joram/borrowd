@@ -50,6 +50,12 @@ export default defineConfig(({mode}) => {
       allowedHosts: [
         ".veilstreamapp.com",
       ],
+      cors: {
+        origin: [
+          /^https?:\/\/([a-z0-9-]+\.)?veilstreamapp\.com$/,
+          /^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/,
+        ],
+      },
     }
   }
 });
