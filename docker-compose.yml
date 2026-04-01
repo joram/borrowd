@@ -16,7 +16,7 @@ services:
   frontend:
     build:
       context: .
-      dockerfile: Dockerfile.frontend
+      dockerfile: Dockerfile
     command: >
       sh -c "python manage.py migrate &&
              python manage.py loaddata items/item_categories &&
@@ -41,18 +41,6 @@ services:
     depends_on:
       db:
         condition: service_healthy
-
-  static:
-    build:
-      context: .
-      dockerfile: Dockerfile.static
-    command: >
-      sh -c "npm run dev -- --host 0.0.0.0"
-    ports:
-      - "5173:5173"
-    volumes:
-      - .:/app
-      - /app/node_modules
 
 volumes:
   postgres_data:

@@ -15,18 +15,12 @@ DATABASES = {
 
 ALLOWED_HOSTS = ["*"]
 
-STATIC_ROOT = BASE_DIR / "staticfiles"  # noqa: F405
-_django_vite_config = {
-    "dev_mode": DEBUG,
-    "dev_server_protocol": BASE_STATIC_PROTOCOL,  # noqa: F405
-    "dev_server_host": BASE_STATIC_HOST,  # noqa: F405
-    "manifest_path": BASE_DIR / "build" / "manifest.json",  # noqa: F405
-}
-if BASE_STATIC_PORT is not None:  # noqa: F405
-    _django_vite_config["dev_server_port"] = BASE_STATIC_PORT  # noqa: F405
-
+STATIC_ROOT = os.path.join(env("PLATFORM_APP_DIR"), "staticfiles")
 DJANGO_VITE = {
-    "default": _django_vite_config,
+    "default": {
+        "dev_mode": False,
+        "manifest_path": BASE_DIR / "build" / "manifest.json",  # noqa: F405
+    }
 }
 
 if env.bool("LOCAL_SENTRY_ENABLED", default=False):
