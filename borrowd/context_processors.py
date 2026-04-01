@@ -22,7 +22,7 @@ def vite(request):
             "vite_css_urls": [],
         }
 
-    static_prefix = f"/{settings.STATIC_URL}"
+    static_prefix = "/" + settings.STATIC_URL.lstrip("/")
     js_url = f"{static_prefix}js/main.js"
     css_urls = []
     try:
