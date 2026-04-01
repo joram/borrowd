@@ -1,6 +1,6 @@
 <div x-data="{ initialTrustLevel: {{ trust_level }}, selectedTrustLevel: {{ trust_level }}, isSubmittingTrustLevelUpdate: false }"
      class="flex flex-wrap items-center gap-2">
-    <div class="text-sm font-normal underline underline-offset-2 decoration-dotted bg-base-content/60 bg-clip-text text-transparent">
+    <div class="text-sm font-normal bg-base-content/60 bg-clip-text text-transparent">
         Your trust level:
     </div>
 
@@ -13,7 +13,7 @@
             <select name="trust_level"
                     x-model="selectedTrustLevel"
                     class="btn btn-soft btn-xs appearance-none bg-none pl-3 pr-6 font-medium"
-                    :class="Number(selectedTrustLevel) === 2 ? 'btn-success' : 'btn-warning'">
+                    :class="Number(selectedTrustLevel) === 2 ? 'btn-success' : 'btn-ghost'">
                 <option value="1">
                     Standard
                 </option>
@@ -22,7 +22,7 @@
                 </option>
             </select>
             <span class="pointer-events-none absolute inset-y-0 right-3 flex items-center"
-                  :class="Number(selectedTrustLevel) === 2 ? 'text-success' : 'text-warning'">
+                  :class="Number(selectedTrustLevel) === 2 ? 'text-success' : 'text-base-content/60'">
                 <svg xmlns="http://www.w3.org/2000/svg"
                      viewBox="0 0 20 20"
                      fill="none"
