@@ -12,7 +12,7 @@ else:
     DEBUG = False
     ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
 
-VITE_DEV_MODE = DEBUG and env("PLATFORM_APPLICATION_NAME", default=None) is None
+VITE_DEV_MODE = DEBUG and BASE_STATIC_HOST in {"localhost", "127.0.0.1"}  # noqa: F405
 
 STATIC_ROOT = BASE_DIR / "staticfiles"  # noqa: F405
 _django_vite_config = {
