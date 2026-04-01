@@ -15,7 +15,7 @@ DATABASES = {
 
 ALLOWED_HOSTS = ["*"]
 
-STATIC_ROOT = os.path.join(env("PLATFORM_APP_DIR"), "staticfiles")
+STATIC_ROOT = os.path.join(env("PLATFORM_APP_DIR", default="/app"), "staticfiles")
 DJANGO_VITE = {
     "default": {
         "dev_mode": False,
