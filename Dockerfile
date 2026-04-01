@@ -4,6 +4,7 @@ WORKDIR /app
 COPY package*.json vite.config.mjs ./
 RUN npm ci
 COPY static/ ./static/
+COPY templates/ ./templates/
 RUN npm run build
 
 # Stage 2: Python application

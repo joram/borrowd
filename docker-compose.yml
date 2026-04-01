@@ -38,6 +38,7 @@ services:
       POSTGRES_DB: borrowd
       POSTGRES_USER: borrowd
       POSTGRES_PASSWORD: borrowd
+      DEBUG: true
     depends_on:
       db:
         condition: service_healthy

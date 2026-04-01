@@ -17,7 +17,7 @@
     {% for css_url in vite_css_urls %}
     <link rel="stylesheet" href="{{ css_url }}">
     {% endfor %}
-    <script type="module" src="{{ vite_main_asset_url }}"></script>
+    <script type="module" crossorigin src="{{ vite_main_asset_url }}"></script>
 </head>
 <body x-data class="flex flex-col justify-center min-h-screen bg-base-200" hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
     {% if borrowd_beta_enabled %}
