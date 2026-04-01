@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 import os
 from pathlib import Path
+from urllib.parse import urlparse
 
 from django.urls import reverse_lazy
 
@@ -186,6 +187,15 @@ USE_TZ = True
 
 # URL to build links when HttpRequest not available (e.g. email notifications)
 BASE_URL = "http://localhost:8000"
+BASE_STATIC_URL = env("BASE_STATIC_URL", default="http://localhost:5173")
+
+_parsed_base_static_url = urlparse(BASE_STATIC_URL)
+if not _parsed_base_static_url.netloc:
+    _parsed_base_static_url = urlparse(f"//{BASE_STATIC_URL}", scheme="http")
+
+BASE_STATIC_PROTOCOL = _parsed_base_static_url.scheme or "http"
+BASE_STATIC_HOST = _parsed_base_static_url.hostname or "localhost"
+BASE_STATIC_PORT = _parsed_base_static_url.port or 5173
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/

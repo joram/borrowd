@@ -19,6 +19,9 @@ STATIC_ROOT = BASE_DIR / "staticfiles"  # noqa: F405
 DJANGO_VITE = {
     "default": {
         "dev_mode": DEBUG,
+        "dev_server_protocol": BASE_STATIC_PROTOCOL,  # noqa: F405
+        "dev_server_host": BASE_STATIC_HOST,  # noqa: F405
+        "dev_server_port": BASE_STATIC_PORT,  # noqa: F405
         "manifest_path": BASE_DIR / "build" / "manifest.json",  # noqa: F405
     }
 }
