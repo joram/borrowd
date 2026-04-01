@@ -47,7 +47,9 @@ export default defineConfig(({mode}) => {
       }
     },
     server: {
-      allowedHosts: ["veilstreamapp.com"],
+      allowedHosts: [
+        ".veilstreamapp.com",
+      ],
     }
   }
 });
