@@ -13,10 +13,10 @@ services:
       timeout: 5s
       retries: 5
 
-  api:
+  frontend:
     build:
       context: .
-      dockerfile: Dockerfile.api
+      dockerfile: Dockerfile.frontend
     command: >
       sh -c "python manage.py migrate &&
              python manage.py loaddata items/item_categories &&
@@ -42,10 +42,10 @@ services:
       db:
         condition: service_healthy
 
-  frontend:
+  static:
     build:
       context: .
-      dockerfile: Dockerfile.vite
+      dockerfile: Dockerfile.static
     command: >
       sh -c "npm run dev -- --host 0.0.0.0"
     ports:
