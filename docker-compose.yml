@@ -1,0 +1,48 @@
+services:
+  db:
+    image: postgres:17
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: borrowd
+      POSTGRES_USER: borrowd
+      POSTGRES_PASSWORD: borrowd
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U borrowd"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: >
+      sh -c "python manage.py migrate &&
+             python manage.py loaddata items/item_categories &&
+             python manage.py runserver 0.0.0.0:8000"
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+      - /app/.venv
+      - /app/build
+      - media:/app/media
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      DJANGO_SETTINGS_MODULE: borrowd.config.docker.django
+      DJANGO_SECRET_KEY: insecure-docker-dev-secret-key
+      POSTGRES_HOST: db
+      POSTGRES_DB: borrowd
+      POSTGRES_USER: borrowd
+      POSTGRES_PASSWORD: borrowd
+      DEBUG: true
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  postgres_data:
+  media:
