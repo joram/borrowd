@@ -28,6 +28,19 @@ dev = [
     "pyyaml>=6.0.2",
 ]
 
+[tool.setuptools]
+packages = [
+    "borrowd",
+    "borrowd_beta",
+    "borrowd_groups",
+    "borrowd_items",
+    "borrowd_notifications",
+    "borrowd_permissions",
+    "borrowd_users",
+    "borrowd_web",
+]
+py-modules = []
+
 [tool.djlint]
 # https://djlint.com/docs/configuration/
 profile = "django"
