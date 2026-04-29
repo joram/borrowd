@@ -33,7 +33,8 @@ export default defineConfig(({mode}) => {
       assetsDir: "",
       rollupOptions: {
         input: {
-          main: resolve("./static/js/main.js"),
+          // Must match {% vite_asset 'static/js/main.js' %} — Rollup entry name becomes the manifest key.
+          "static/js/main.js": resolve("./static/js/main.js"),
         }
       }
     },
